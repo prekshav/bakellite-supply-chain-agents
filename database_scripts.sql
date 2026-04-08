@@ -29,19 +29,31 @@ route_efficiency_score DECIMAL(3, 2)
 -- We use a CROSS JOIN pattern with realistic naming segments to create meaningful variety
 DO $$
 DECLARE
-brand_names TEXT[] := ARRAY['Artisan', 'Nature', 'Elite', 'Pure', 'Global', 'Eco', 'Velocity', 'Heritage', 'Aura', 'Summit'];
-product_types TEXT[] := ARRAY['Ice Cream', 'Body Wash', 'Laundry Detergent', 'Shampoo', 'Mayonnaise', 'Deodorant', 'Tea', 'Soup', 'Face Cream', 'Soap'];
-variants TEXT[] := ARRAY['Classic', 'Gold', 'Premium', 'Eco-Friendly', 'Organic', 'Night-Repair', 'Extra-Fresh', 'Zero-Sugar', 'Sensitive', 'Maximum-Strength'];
+brand_names TEXT[] := ARRAY['Black PF(Bakelite) Powder (SI-650)', 'Black Bakelite Powder(SI-610)', 
+'Black Bakelite Powder (SI-750)', 'Black Bakelite Powder (SI-750)', 
+'Color Bakelite Powder (SI-621)', 'Black Bakelite Powder (SI-911)', 
+'Black Bakelite Powder (SI-630)', 'Natural Bakelite Powder(SI-163)', 
+'Brown Bakelite Powder(SI-915)', 'Cotton Filled Reinforced Powder (SI-171)',
+'Cotton Filled Reinforced Powder (SI-915)','Glass Filled Reinforced Powder(SI-042)',
+'Mica Powder(SI-621)’,’Graphite Powder(SI-621)','Glass Filled Powder(SI-621)'];
+product_types TEXT[] := ARRAY['SI-650', 'SI-610', 'SI-750', 'SI-750','SI-621', 'SI-911', 'SI-630', 'SI-163', 'SI-915', 'SI-171', 'SI-915','SI-042','SI-621','SI-621','SI-621'];
+variants TEXT[] := ARRAY['Black PF(Bakelite) Powder (SI-650)', 'Black Bakelite Powder(SI-610)', 
+'Black Bakelite Powder (SI-750)', 'Black Bakelite Powder (SI-750)', 
+'Color Bakelite Powder (SI-621)', 'Black Bakelite Powder (SI-911)', 
+'Black Bakelite Powder (SI-630)', 'Natural Bakelite Powder(SI-163)', 
+'Brown Bakelite Powder(SI-915)', 'Cotton Filled Reinforced Powder (SI-171)',
+'Cotton Filled Reinforced Powder (SI-915)','Glass Filled Reinforced Powder(SI-042)','Mica Powder(SI-621)',
+'Graphite Powder(SI-621)','Glass Filled Powder(SI-621)'];
 regions TEXT[] := ARRAY['EMEA', 'APAC', 'LATAM', 'NAMER'];
-dcs TEXT[] := ARRAY['London-Hub', 'Mumbai-Central', 'Sao-Paulo-Logistics', 'Singapore-Port', 'Rotterdam-Gate', 'New-York-DC'];
+dcs TEXT[] := ARRAY['Gujarat', 'Maharashtra', 'Daman', 'Rajasthan', 'Delhi', 'Karnataka'];
 BEGIN
 INSERT INTO products (name, category, stock_level, distribution_center, region)
 SELECT
 b || ' ' || v || ' ' || t as name,
 CASE
-WHEN t IN ('Ice Cream', 'Mayonnaise', 'Tea', 'Soup') THEN 'Food & Refreshment'
-WHEN t IN ('Body Wash', 'Shampoo', 'Deodorant', 'Face Cream', 'Soap') THEN 'Personal Care'
-ELSE 'Home Care'
+WHEN t IN ('Black PF(Bakelite) Powder (SI-650)', 'Black Bakelite Powder(SI-610)', 'Black Bakelite Powder (SI-750)', 'Black Bakelite Powder (SI-750)’,’Cotton Filled Reinforced Powder (SI-915)’,’Graphite Powder(SI-621)’) THEN ‘Wood Flour’
+WHEN t IN ('Cotton Filled Reinforced Powder (SI-621)') THEN ‘Cotton’
+ELSE 'Fiber Glass '
 END as category,
 floor(random() * 20000 + 100)::int as stock_level,
 dcs[floor(random() * 6 + 1)] as distribution_center,
@@ -53,12 +65,11 @@ unnest(product_types) t,
 generate_series(1, 50); -- 10 * 10 * 10 * 50 = 50,000 records
 END $$;
 
-
 -- These ensure you have predictable answers for specific "Executive" questions
 INSERT INTO products (name, category, stock_level, distribution_center, region) VALUES
-('Magnum Ultra Gold Limited Edition', 'Food & Refreshment', 45, 'Rotterdam-Gate', 'EMEA'),
-('Dove Pro-Health Deep Moisture', 'Personal Care', 12000, 'Mumbai-Central', 'APAC'),
-('Hellmanns Real Organic Mayonnaise', 'Food & Refreshment', 8000, 'London-Hub', 'EMEA');
+('Black PF(Bakelite) Powder (SI-650)', 'Wood Flour', 1000, 'Gujarat', 'EMEA'),
+('Black Bakelite Powder (SI-750)', 'Wood Flour', 500, 'Maharashtra', 'APAC'),
+('Cotton Filled Reinforced Powder (SI-621)', 'Cotton', 1000, 'Rajasthan', 'EMEA');
 
 -- Shipments Generation (More shipments than products)
 INSERT INTO shipments (product_id, status, estimated_arrival, route_efficiency_score)

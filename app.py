@@ -201,7 +201,7 @@ def chat():
     )
 
     #print("****RESPONSE1******")
-    #print(asyncio.run(in_memory_service.search_memory(app_name=APP_NAME, user_id=USER_ID, query="inventory data for icecream")))
+    #print(asyncio.run(in_memory_service.search_memory(app_name=APP_NAME, user_id=USER_ID, query="inventory data for bakellite powder")))
     #print("****RESPONSE2******")
     #print(asyncio.run(memory_bank_service.search_memory(app_name=APP_NAME,user_id=USER_ID,query="inventory")))
     print("****RESPONSE******")
